@@ -42,3 +42,8 @@ gem 'execjs'
 gem 'therubyracer'
 gem 'mechanize'
 gem 'selenium-webdriver'
+
+# mongo
+gem 'mongo_mapper'
+gem 'bson_ext'
+
