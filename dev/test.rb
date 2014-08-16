@@ -1,0 +1,161 @@
+#require 'rubygems'
+#require 'mechanize'
+
+#agent = Mechanize.new()
+#page = agent.get("http://www.maccosmetics.com/search/esearch.tmpl?search=yield+to+love&search_submit.x=0&search_submit.y=0")
+
+
+#####################################3
+#
+# phantomJS needs to be running on localhost:10001 for this to work
+# (http://stackoverflow.com/questions/8778513/how-can-i-setup-run-phantomjs-on-ubuntu)
+# in shell: # phantomjs --webdriver=10001
+require "selenium-webdriver"
+
+class String
+	def replacewith(del, ins)
+		return self.split(del).join(ins)
+	end
+end
+
+
+# connect to phantomJS (possibly requires libqt4-dev qt4-qmake)
+#driver = Selenium::WebDriver.for(:remote, :url => "http://localhost:10001")
+driver = Selenium::WebDriver.for :firefox
+
+#################################
+#################################
+"
+TODO: the 'categories' hash below represents the information structure we're looking at on the site.
+We need to be able to scrape the site and return this kind of structure, with product names and variations.
+Once we can do that, we can write logic for hashing/comparing differences and notifying users.
+Then we can write signup, billing, mobile client, and other parts.
+
+"
+products = {
+	"eyes" => {
+		"shadow" => [],
+		"liner" => [],
+		"mascara" => [],
+		"brow" => [],
+		"lash" => [],
+		"primer" => [],
+		"kits_and_palettes" => []
+	},
+	"lips" => {
+		"lipstick" => [],
+		"lipglass" => [],
+		"lip_pencil" => [],
+		"care" => [],
+		"primer" => [],
+		"kits_and_bags" => []
+	},
+	"face" => {
+		"foundation" => [],
+		"powder" => [],
+		"cheek" => [],
+		"concealer" => [],
+		"primer" => [],
+		"multi_use" => []
+	},
+	"nails" => {
+		"products" => ["colors"]
+	},
+	"skincare" => {
+
+	},
+	"tools" => {
+		"brushes" => {
+			"eye" => []
+		}
+	}
+
+}
+
+def find_products(productname)
+	productname = productname.replacewith(" ", "+")
+	items = driver.find_elements(:class, "itemname")
+	items.each do |i|
+		puts i.text
+		productnames << i.text
+	end
+end
+
+def get_subcat_items(driver, clickID, product_address)
+	driver.find_element(:id, clickID).click
+	driver.find_elements(:class, "panelnav_detail_hd").each do |i|
+		# there are hidden things in the DOM, so only add if the user can see it
+		product_address << i.attribute("alt") if i.displayed?
+	end
+	driver.find_element(:id, clickID).click
+end
+
+
+# driver.save_screenshot("screenshot.png")
+# full html is in driver.page_source
+#driver.navigate.to "http://www.maccosmetics.com/search/esearch.tmpl?search=yield+to+love&search_submit.x=0&search_submit.y=0"
+driver.navigate.to "http://www.maccosmetics.com/index.tmpl"
+
+# click on img#gnav_makeup_hd (Makeup)
+driver.find_element(:id, 'gnav_makeup_hd').click
+
+	# click on img#pnav_CAT148_hd (eyes)
+	driver.find_element(:id, 'pnav_CAT148_hd').click
+
+	# somehow not finished loading unless we wait a sec (network speed issue?)
+	sleep(1)
+
+	# # click on img#psubcat_CAT154_hd (shadow)
+	# driver.find_element(:id, 'psubcat_CAT154_hd').click
+	# 	# store each .panelnav_detail_hd.attribute("alt") as a product
+	# 	driver.find_elements(:class, "panelnav_detail_hd").each do |i|
+	# 		(products['eyes']['shadow'] << i.attribute("alt")) if i.displayed?
+	# 	end
+	# # click on img#psubcat_CAT154_accordion_hd (close shadow)
+	# driver.find_element(:id, 'psubcat_CAT154_accordion_hd').click
+	
+	# ## Eyes
+	# get_subcat_items(driver, 'psubcat_CAT151_accordion_hd', products['eyes']['liner'])
+	# get_subcat_items(driver, 'psubcat_CAT152_accordion_hd', products['eyes']['mascara'])
+	# get_subcat_items(driver, 'psubcat_CAT149_accordion_hd', products['eyes']['brow'])
+	# get_subcat_items(driver, 'psubcat_CAT150_accordion_hd', products['eyes']['lash'])
+	# get_subcat_items(driver, 'psubcat_CAT153_accordion', products['eyes']['primer'])
+	# get_subcat_items(driver, 'psubcat_CAT2222_accordion_hd', products['eyes']['kits_and_palettes'])
+
+	# close eyes
+	driver.find_element(:id, 'pnav_CAT148_hd').click
+
+
+	# lips
+ 	driver.find_element(:id, 'pnav_CAT163_hd').click
+ 	sleep(1)
+ 	driver.find_element(:id, 'pnav_CAT163_hd').click
+	
+ 	# face
+ 	driver.find_element(:id, 'pnav_CAT155_hd').click
+ 	sleep(1)
+ 	driver.find_element(:id, 'pnav_CAT155_hd').click
+
+
+
+ 	#### NOW EVERYTHING IS OPEN....get all products
+ 	product_list_flat = []
+
+ 	driver.find_elements(:class, "panelnav_detail_hd").each do |i|
+ 		product_list_flat << i.attribute("alt")
+ 	end
+
+ 	## nails (different because everything comes in many variants (colors))
+ 	#driver.find_element(:id, 'pnav_CAT170_hd').click
+ 	#sleep(1)
+ 	#driver.find_element(:id, 'pnav_CAT170_hd').click
+
+ 	##### SKINCARE (another top-level categeory like makeup)
+
+	# testing
+	print product_list_flat.sort
+	print("\n\nProduct count: #{product_list_flat.count} \n\n")
+	return
+
+
+driver.quit
