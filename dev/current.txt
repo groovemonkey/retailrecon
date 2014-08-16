@@ -8,8 +8,12 @@ WEIRDNESS:
 
 
 TODO:
+-write result list to file in get_all_products.rb
+-compare existing list to previous list in get_all_products.rb ( http://mallibone.wordpress.com/2011/02/18/compare-listsarrays-in-ruby/ )
+
 -could this be faster if I just got the whole DOM by clicking through everything (like in get_all_products.rb) and then parsed it locally? Instead of doing the webdriver thing the whole time and taking 4 minutes to get through all the bullshit.
-	-how to see availability for all subvariations?
+	-getting all products into categories, YES
+	-getting availability, NO
 
 
 
