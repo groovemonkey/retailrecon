@@ -11,6 +11,7 @@
 # (http://stackoverflow.com/questions/8778513/how-can-i-setup-run-phantomjs-on-ubuntu)
 # in shell: # phantomjs --webdriver=10001
 require "selenium-webdriver"
+debug = true
 
 class String
 	def replacewith(del, ins)
@@ -20,57 +21,12 @@ end
 
 
 # connect to phantomJS (possibly requires libqt4-dev qt4-qmake)
-#driver = Selenium::WebDriver.for(:remote, :url => "http://localhost:10001")
-driver = Selenium::WebDriver.for :firefox
+driver = Selenium::WebDriver.for(:remote, :url => "http://localhost:10001")
+#driver = Selenium::WebDriver.for :firefox
 
 #################################
 #################################
-"
-TODO: the 'categories' hash below represents the information structure we're looking at on the site.
-We need to be able to scrape the site and return this kind of structure, with product names and variations.
-Once we can do that, we can write logic for hashing/comparing differences and notifying users.
-Then we can write signup, billing, mobile client, and other parts.
 
-"
-products = {
-	"eyes" => {
-		"shadow" => [],
-		"liner" => [],
-		"mascara" => [],
-		"brow" => [],
-		"lash" => [],
-		"primer" => [],
-		"kits_and_palettes" => []
-	},
-	"lips" => {
-		"lipstick" => [],
-		"lipglass" => [],
-		"lip_pencil" => [],
-		"care" => [],
-		"primer" => [],
-		"kits_and_bags" => []
-	},
-	"face" => {
-		"foundation" => [],
-		"powder" => [],
-		"cheek" => [],
-		"concealer" => [],
-		"primer" => [],
-		"multi_use" => []
-	},
-	"nails" => {
-		"products" => ["colors"]
-	},
-	"skincare" => {
-
-	},
-	"tools" => {
-		"brushes" => {
-			"eye" => []
-		}
-	}
-
-}
 
 def find_products(productname)
 	productname = productname.replacewith(" ", "+")
@@ -122,26 +78,33 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 	# get_subcat_items(driver, 'psubcat_CAT153_accordion', products['eyes']['primer'])
 	# get_subcat_items(driver, 'psubcat_CAT2222_accordion_hd', products['eyes']['kits_and_palettes'])
 
-	# close eyes
+	#puts "debug: #{driver.find_elements(:class, "panelnav_detail_hd").count} items loaded after clicking on 'eyes' but BEFORE CLOSING EYES"
+
+	## close eyes
 	driver.find_element(:id, 'pnav_CAT148_hd').click
-
-
-	# lips
- 	driver.find_element(:id, 'pnav_CAT163_hd').click
- 	sleep(1)
- 	driver.find_element(:id, 'pnav_CAT163_hd').click
 	
- 	# face
+	# Lips
+ 	driver.find_element(:id, 'pnav_CAT163_hd').click
+ 	sleep(1)
+ 	driver.find_element(:id, 'pnav_CAT163_hd').click
+	puts "debug: #{driver.find_elements(:class, "panelnav_detail_hd").count} items loaded after clicking on 'lips'" if debug
+
+
+
+ 	# Face
  	driver.find_element(:id, 'pnav_CAT155_hd').click
  	sleep(1)
  	driver.find_element(:id, 'pnav_CAT155_hd').click
-
+ 	puts "debug: #{driver.find_elements(:class, "panelnav_detail_hd").count} items loaded after clicking on 'face'" if debug
 
 
  	#### NOW EVERYTHING IS OPEN....get all products
  	product_list_flat = []
 
  	driver.find_elements(:class, "panelnav_detail_hd").each do |i|
+ 		# get category name for this item -- INEFFICIENT...
+ 		#category = i.find_element(:xpath, '../../../../../../../img').attribute("alt")
+
  		product_list_flat << i.attribute("alt")
  	end
 
@@ -152,10 +115,9 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 
  	##### SKINCARE (another top-level categeory like makeup)
 
-	# testing
+	# # Testing
 	print product_list_flat.sort
-	print("\n\nProduct count: #{product_list_flat.count} \n\n")
-	return
+	print("\n\nFinal Product count: #{product_list_flat.count} \n\n")
 
 
 driver.quit

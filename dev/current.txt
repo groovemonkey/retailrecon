@@ -1,7 +1,26 @@
 # RetailRecon (Ruby version)
 
+WEIRDNESS:
+-items returned: 245
+-custom palette doesn't work yet (eye shadows)
+
+
+TODO:
+-could this be faster if I just got the whole DOM by clicking through everything (like in test.rb) and then parsed it locally? Instead of doing the webdriver thing the whole time and taking 4 minutes to get through all the bullshit.
+	-how to see availability for all subvariations?
+	
+
+
+-should we build an information structure on our end? Categories, etc? Then scrape the old way (hidden vs visible, step by step instead of all at once)
+-what kind of questions do we want to ask the data?
+-right now, we can say "new product!" -- that's it. Then we'd have to search the site for the product and scrape collection name, product category, etc. from there. Seems OK to me.
+
+-how do we see what's changed? Comparing sorted lists to find the difference?r
+
+
+
 ## Info:
-+ phantomjs takes ~7 secs to get all MAC product names, firefox takes ~55
++ phantomjs takes ~7 secs to get all MAC product names (single-level array), firefox takes ~55
 
 1st lvl cat 	2nd lvl cat 	3rd lvl cat
 Makeup			Eyes			Shadow,...
@@ -9,7 +28,3 @@ Makeup			Eyes			Shadow,...
 + no need to manually click through to 3rd level categories and the products below.
 + when a 2nd lvl cat is clicked, all products for that cat are loaded, existing products are hidden but stay in DOM.
 + therefore, clicking each 2nd lvl cat and then grabbing all products (hidden and visible) WORKS
-
-
-
-
