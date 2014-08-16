@@ -1,14 +1,16 @@
 # RetailRecon (Ruby version)
 
 WEIRDNESS:
--items returned: 245
+-items returned:
+	-117 on first run of get_all_products.rb,
+	-245 on second run
 -custom palette doesn't work yet (eye shadows)
 
 
 TODO:
--could this be faster if I just got the whole DOM by clicking through everything (like in test.rb) and then parsed it locally? Instead of doing the webdriver thing the whole time and taking 4 minutes to get through all the bullshit.
+-could this be faster if I just got the whole DOM by clicking through everything (like in get_all_products.rb) and then parsed it locally? Instead of doing the webdriver thing the whole time and taking 4 minutes to get through all the bullshit.
 	-how to see availability for all subvariations?
-	
+
 
 
 -should we build an information structure on our end? Categories, etc? Then scrape the old way (hidden vs visible, step by step instead of all at once)
