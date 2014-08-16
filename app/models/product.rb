@@ -1,4 +1,4 @@
-class MacProduct
+class Product
   include MongoMapper::Document
 
   key :name, String
@@ -6,11 +6,11 @@ class MacProduct
   key :url, String
   key :has_variations, Boolean
 
-  many :mac_variations
+  many :variations
 
 end
 
-class MacVariation
+class Variation
   include MongoMapper::Document
 
   key :name, String

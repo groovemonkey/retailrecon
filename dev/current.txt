@@ -8,6 +8,12 @@ WEIRDNESS:
 
 
 TODO:
+-new approach: quick local parse for products+categories, then crawling all product URLs and checking for availability.
+
+-populate_product_list_from_local_html.rb should be in a controller, and should write into the mongoDB
+
+-write result objects to mongoDB (insert_products_in_db) from create_product_structure.rb
+
 -write result list to file in get_all_products.rb
 -compare existing list to previous list in get_all_products.rb ( http://mallibone.wordpress.com/2011/02/18/compare-listsarrays-in-ruby/ )
 

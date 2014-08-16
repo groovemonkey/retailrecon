@@ -1,0 +1,10 @@
+<h2>Retailers</h2>
+ 
+<% @retailers.each do |retailer| %>
+
+  <p><strong><%= retailer.name %></strong></p>
+  <p>Tracking <%= retailer.number_of_products %> products from this retailer.</p>
+
+<% end %>
+
+ 

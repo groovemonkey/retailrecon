@@ -2,6 +2,33 @@
 t_start = Time.new
 
 
+def insert_products_in_db(product_hash)
+	# mac = Retailer.find_by_name("MAC")
+
+	product_hash.each do |bodypart,category|
+		category.each do |c, products|
+
+			products.each do |name, vars|
+				p = Product.new()
+				p.category = c
+				p.name = name
+
+				vars.each do |v,instock|
+					newvariation = Variation.new()
+					newvariation.name = name
+					newvariation.available = instock
+
+					if instock == "novariations"
+						p.has_variations = false
+					end
+					
+				end
+			end
+		end
+	end
+end
+
+
 def display_products(product_hash)
 	product_hash.each do |bodypart,category|
 		puts "Products for #{bodypart}:"
@@ -128,7 +155,7 @@ end
 
 t_end = Time.new
 
-
+puts productHash
 display_products(productHash)
 puts "\n\nThat run took #{t_end - t_start} seconds.\n\n"
 

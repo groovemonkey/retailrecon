@@ -18,7 +18,6 @@ def get_info_from_products(bodypart)
 	allproducts = page.css('.panelnav_detail_hd')
 	allproducts.each do |p|
 		productObj = {
-			"baseclass" => bodypart,
 			"class" => p.xpath("../../../../../../../img").attribute("alt").value,
 			"name" => p.attribute("alt").value,
 			"URL" => p.xpath("../../../..").attribute('href').value
