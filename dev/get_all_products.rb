@@ -20,10 +20,14 @@ class String
 end
 
 
+begin
 # connect to phantomJS (possibly requires libqt4-dev qt4-qmake)
 driver = Selenium::WebDriver.for(:remote, :url => "http://localhost:10001")
 #driver = Selenium::WebDriver.for :firefox
 
+rescue Errno::ECONNREFUSED
+	puts "\nError: Phantomjs isn't running (or isn't accepting connections).\nPlease start it with 'phantomjs --webdriver=10001'\n\n"
+end
 #################################
 #################################
 
@@ -82,7 +86,9 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 
 	## close eyes
 	driver.find_element(:id, 'pnav_CAT148_hd').click
-	
+	puts "debug: #{driver.find_elements(:class, "panelnav_detail_hd").count} items loaded after clicking on 'eyes'" if debug
+
+	sleep(1)
 	# Lips
  	driver.find_element(:id, 'pnav_CAT163_hd').click
  	sleep(1)
@@ -90,7 +96,7 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 	puts "debug: #{driver.find_elements(:class, "panelnav_detail_hd").count} items loaded after clicking on 'lips'" if debug
 
 
-
+	sleep(1)
  	# Face
  	driver.find_element(:id, 'pnav_CAT155_hd').click
  	sleep(1)
@@ -115,9 +121,51 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 
  	##### SKINCARE (another top-level categeory like makeup)
 
-	# # Testing
-	print product_list_flat.sort
-	print("\n\nFinal Product count: #{product_list_flat.count} \n\n")
+
+
+	### FILE STUFF && CHANGE CALCULATION
+	arrayfile = 'productarray.dx'
+
+	# load + clear file
+	if File.exists?(arrayfile)
+		oldArray = Marshal.load(File.read(arrayfile))
+		File.delete(arrayfile)
+	else
+		oldArray = []
+	end
+
+	# calculate changes
+	changes = product_list_flat - oldArray
+	puts "#{changes.count} new products found: #{changes}"
+
+	# write changes into logfile
+
+	# save new array
+	serialized_array = Marshal.dump(product_list_flat)
+	File.open(arrayfile, 'w') {|f| f.write(serialized_array) }
+
+
+
+
+
+	## Test Output
+	num_products = product_list_flat.count
+	#print product_list_flat.sort
+	print("\n\nFinal Product count: #{num_products} \n\n")
+
+	logfile = File.open('products.log', "a")
+	#time = Time.now.to_s.split()[0] # "2014-09-24"
+	time = Time.now.to_s
+
+	logstring = "#{time} -- Products: #{num_products}"
+	if changes.count > 0
+		logstring += " -- #{changes.count} new products: #{changes}"
+	end
+
+	logfile.write(logstring + "\n")
+	logfile.close
+
+
 
 
 driver.quit

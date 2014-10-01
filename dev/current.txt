@@ -2,9 +2,10 @@
 
 WEIRDNESS:
 -items returned:
-	-117 on first run of get_all_products.rb,
+	-117 [edit: or 169; Sept 22 2014] on first run of get_all_products.rb,
 	-245 on second run
 -custom palette doesn't work yet (eye shadows)
+-using phantomjs: phantomjs --webdriver=10001 
 
 
 TODO:
