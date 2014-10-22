@@ -51,6 +51,8 @@ def get_subcat_items(driver, clickID, product_address)
 end
 
 
+
+start_timestamp = Time.now
 # driver.save_screenshot("screenshot.png")
 # full html is in driver.page_source
 #driver.navigate.to "http://www.maccosmetics.com/search/esearch.tmpl?search=yield+to+love&search_submit.x=0&search_submit.y=0"
@@ -124,7 +126,9 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 
 
 	### FILE STUFF && CHANGE CALCULATION
-	arrayfile = 'productarray.dx'
+	scriptdir = File.dirname(__FILE__)
+	arrayfile = scriptdir + '/' + 'productarray.dx'
+	
 
 	# load + clear file
 	if File.exists?(arrayfile)
@@ -153,13 +157,14 @@ driver.find_element(:id, 'gnav_makeup_hd').click
 	#print product_list_flat.sort
 	print("\n\nFinal Product count: #{num_products} \n\n")
 
-	logfile = File.open('products.log', "a")
-	#time = Time.now.to_s.split()[0] # "2014-09-24"
-	time = Time.now.to_s
+	logfilename = scriptdir + '/' + 'products.log'
+	logfile = File.open(logfilename, "a")
+	end_timestamp = Time.now
+	runtime = end_timestamp - start_timestamp
 
-	logstring = "#{time} -- Products: #{num_products}"
+	logstring = "#{end_timestamp.to_s} -- Products: #{num_products}, in #{runtime} seconds."
 	if changes.count > 0
-		logstring += " -- #{changes.count} new products: #{changes}"
+		logstring += " -- #{changes.count} new products: #{changes}, in #{runtime} seconds."
 	end
 
 	logfile.write(logstring + "\n")
