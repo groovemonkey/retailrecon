@@ -13,12 +13,6 @@
 require "selenium-webdriver"
 debug = true
 
-class String
-	def replacewith(del, ins)
-		return self.split(del).join(ins)
-	end
-end
-
 
 begin
 # connect to phantomJS (possibly requires libqt4-dev qt4-qmake)
@@ -33,7 +27,7 @@ end
 
 
 def find_products(productname)
-	productname = productname.replacewith(" ", "+")
+	productname = productname.gsub(/ /, "+")
 	items = driver.find_elements(:class, "itemname")
 	items.each do |i|
 		puts i.text
