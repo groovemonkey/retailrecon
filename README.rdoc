@@ -1,28 +1,21 @@
-== README
+== RetailRecon
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a small, quick-and-dirty crawler prototype which checks MAC's (old) website for new products. It creates a hash of products and serializes this between runs, so you can figure out what products (if anything) have been added to the website since your last run.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+The website uses enough ajax to make this impossible without rendering JS, so we use selenium + phantomjs.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+The /dev directory is where the prototype lives; the rails app around it is not included in this open-sourced version.
+
+
+## Requirements
+Ruby, selenium, phantomjs
+
+## How to use:
+
+1. phantomjs --webdriver=10001          # in a shell
+2. run the scripts in dev:              # in a separate shell
+        create_product_structure.rb
+        get_all_products.rb
+        populate_product_list_from_local_html.rb
+

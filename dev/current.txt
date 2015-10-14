@@ -41,3 +41,5 @@ Makeup			Eyes			Shadow,...
 + no need to manually click through to 3rd level categories and the products below.
 + when a 2nd lvl cat is clicked, all products for that cat are loaded, existing products are hidden but stay in DOM.
 + therefore, clicking each 2nd lvl cat and then grabbing all products (hidden and visible) WORKS
+
+
